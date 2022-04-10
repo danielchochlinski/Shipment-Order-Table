@@ -24,7 +24,6 @@ const Table = () => {
     dispatch(ACTION_TYPES.REMOVE_ORDER);
   };
 
-  
   const getOrders = () => {
     dispatch(fetchOrders());
   };
@@ -33,10 +32,13 @@ const Table = () => {
     getOrders();
   }, []);
   console.log(orders);
-
+  let data = [];
+  if (orders) {
+    data = orders;
+  }
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => orders, []);
- 
+  data = useMemo(() => orders, []);
+
   const tableHooks = (hooks) => {
     hooks.visibleColumns.push((columns) => [
       ...columns,
@@ -60,7 +62,6 @@ const Table = () => {
       },
     ]);
   };
-
   const tableInstance = useTable(
     { columns, data },
     useGlobalFilter,
@@ -139,11 +140,8 @@ const Table = () => {
                 );
               })}
             </tbody>
-            <Button
-              type={style}
-              handleClick={previousPage}
-              disabled={!canPreviousPage}
-            >
+
+            <Button handleClick={previousPage} disabled={!canPreviousPage}>
               Previous
             </Button>
             <Button handleClick={nextPage} disabled={!canNextPage}>

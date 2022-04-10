@@ -24,10 +24,14 @@ const ordersReducer = (state = initialState, action) => {
         fetchFailure: false,
         orders: state.orders.filter((item) => item !== action.payload),
       };
-    case ACTION_TYPES.EDIT_ORDER:
+    case ACTION_TYPES.UPDATE_ORDER:
       return {
         ...state,
+        items: state.items.map(
+          (item) => item.orderNo === action.payload.orderNo
+        ),
       };
+
     default:
       return state;
   }
