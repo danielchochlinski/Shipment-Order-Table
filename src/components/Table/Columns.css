@@ -43,9 +43,6 @@ thead tr {
   background: -webkit-gradient(linear, left top, right top, from(#a9cefc), to(#557ee6));
   background: linear-gradient(to right, #a9cefc, #557ee6);
   border-radius: 1rem;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 3rem;
 }
 
 th,
@@ -78,19 +75,38 @@ tr:nth-child(odd) {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  margin-top: 1rem;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
   padding: 0.5rem;
   margin: 0.5rem;
   background: -webkit-gradient(linear, left top, right top, from(#a9cefc), to(#557ee6));
   background: linear-gradient(to right, #a9cefc, #557ee6);
 }
 
+.search_bar input {
+  border: none;
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.search_bar input:focus {
+  outline: none;
+}
+
 th,
 td:nth-child(3) {
   margin-left: 1rem;
   text-align: left;
+}
+
+td:last-child {
+  text-align: center;
+}
+
+.delete {
+  margin-right: 1rem;
+  background: #e70101;
+  width: 2.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
 }
 /*# sourceMappingURL=Columns.css.map */

@@ -19,17 +19,25 @@ const ordersReducer = (state = initialState, action) => {
         fetchFailure: true,
       };
     case ACTION_TYPES.REMOVE_ORDER:
+      console.log("deleted");
       return {
         ...state,
         fetchFailure: false,
-        orders: state.orders.filter((item) => item !== action.payload),
+        orders: state.orders.filter(
+          (item) => item.orderNo !== action.payload.orderNo
+        ),
       };
+
     case ACTION_TYPES.UPDATE_ORDER:
       return {
         ...state,
-        items: state.items.map(
-          (item) => item.orderNo === action.payload.orderNo
-        ),
+        fetchFailure: false,
+        orders: state.orders.map((order) => {
+          if (order.orderNo === action.payload.orderNo) {
+            return action.payload;
+          }
+          return order;
+        }),
       };
 
     default:

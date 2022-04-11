@@ -7,7 +7,7 @@ import {
 } from "react-table";
 import { COLUMNS } from "./Columns";
 import { useSelector, useDispatch } from "react-redux";
-import { ACTION_TYPES, fetchOrders } from "../../store/actions/orders";
+import { fetchOrders, removeOrder } from "../../store/actions/orders";
 import MOCK_DATA from "../MOCK_DATA.json";
 import "./Columns.css";
 import GlobalFilter from "../FilterInput";
@@ -19,25 +19,23 @@ const Table = () => {
   const [selectedRow, setSelectedRow] = useState({});
 
   const dispatch = useDispatch();
+
   const orders = useSelector((state) => state.order.orders);
-  const deleteOrder = (e) => {
-    dispatch(ACTION_TYPES.REMOVE_ORDER);
+
+  const deleteOrder = (event) => {
+    // event.stopPropagation();
+    dispatch(removeOrder(orderNo));
   };
 
   const getOrders = () => {
     dispatch(fetchOrders());
   };
-
   useEffect(() => {
     getOrders();
   }, []);
-  console.log(orders);
-  let data = [];
-  if (orders) {
-    data = orders;
-  }
+
   const columns = useMemo(() => COLUMNS, []);
-  data = useMemo(() => orders, []);
+  const data = useMemo(() => orders, [orders]);
 
   const tableHooks = (hooks) => {
     hooks.visibleColumns.push((columns) => [
@@ -48,20 +46,14 @@ const Table = () => {
         accessor: (str) => "delete",
 
         Cell: (tableProps) => (
-          <span
-            style={{
-              cursor: "pointer",
-              color: "blue",
-              textDecoration: "underline",
-            }}
-            onClick={deleteOrder}
-          >
-            Delete
-          </span>
+          <button className="delete" onClick={deleteOrder(tableProps.orderNo)}>
+            X
+          </button>
         ),
       },
     ]);
   };
+
   const tableInstance = useTable(
     { columns, data },
     useGlobalFilter,
@@ -101,6 +93,7 @@ const Table = () => {
         <div className="search_bar">
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
         </div>
+
         <div className="table">
           <table {...getTableProps()}>
             <thead>
@@ -122,23 +115,24 @@ const Table = () => {
               ))}
             </thead>
             <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
-                prepareRow(row);
-                return (
-                  <tr
-                    {...row.getRowProps()}
-                    onClick={() => openDetails(row.original)}
-                  >
-                    {row.cells.map((cell, index) => {
-                      return (
-                        <td key={index} {...cell.getCellProps()}>
-                          {cell.render("Cell")}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+              {page &&
+                page.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr
+                      {...row.getRowProps()}
+                      onClick={() => openDetails(row.original)}
+                    >
+                      {row.cells.map((cell, index) => {
+                        return (
+                          <td key={index} {...cell.getCellProps()}>
+                            {cell.render("Cell")}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
             </tbody>
 
             <Button handleClick={previousPage} disabled={!canPreviousPage}>
